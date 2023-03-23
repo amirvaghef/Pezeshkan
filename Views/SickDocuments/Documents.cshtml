@@ -1,0 +1,1448 @@
+﻿@model Pezeshkan.Models.Special2
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string sickInfo = ((Pezeshkan.Models.SickInfo)ViewBag.personalInfo).fname + " " + ((Pezeshkan.Models.SickInfo)ViewBag.personalInfo).lname + " با شماره تماس " + ((Pezeshkan.Models.SickInfo)ViewBag.personalInfo).tel + " و شماره پرونده " + ((Pezeshkan.Models.SickInfo)ViewBag.personalInfo).pcode;
+}
+
+
+<div class="jumbotron">
+    <h1>اطلاعات بیمار</h1>
+    <hr />
+    <div>
+        @Html.DisplayName(sickInfo)
+    </div>
+</div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div>
+        <br />
+        <div class="col-md-6">
+            <div class="row">
+                @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.DropDownListFor(model => model.Date, (SelectList)ViewBag.dates, "Add New", new { @onchange = "changeDate", @class = "form-control chosen-select col" })
+            </div>
+        </div>
+        <br />
+        <h4>Document Information</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.pcode)
+        @Html.HiddenFor(model => model.userId)
+
+        <div class="form-row">
+            <div class="col-md-6">
+                <div class="form-group form-row input-group input-group-sm">
+                    <div class="input-group-prepend">
+                        @Html.LabelFor(model => model.cc, htmlAttributes: new { @class = "control-label input-group-text" })
+                    </div>
+                    @Html.ListBox("ccMulti", (MultiSelectList)ViewBag.vcc, new { @class = "form-control chosen-select", id = "ccMulti", with_add_item = "true" })
+                    @Html.HiddenFor(model => model.cc)
+                    <div class="input-group-append">
+                        <a id="ccMulti_remove_chosen" class="btn btn-danger btn-sm"> - </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group form-row input-group input-group-sm">
+                    <div class="input-group-prepend">
+                        @Html.LabelFor(model => model.fmh, htmlAttributes: new { @class = "control-label input-group-text" })
+                    </div>
+                    @Html.DropDownListFor(model => model.fmh, (SelectList)ViewBag.vfmh, "Please Select", new { @class = "form-control chosen-select", with_add_item = true })
+                    <div class="input-group-append">
+                        <a id="fmh_remove_chosen" class="btn btn-danger btn-sm"> - </a>
+                    </div>
+                </div>
+                <div class="form-group form-row input-group input-group-sm">
+                    <div class="input-group-prepend">
+                        @Html.LabelFor(model => model.pmh, htmlAttributes: new { @class = "control-label input-group-text" })
+                    </div>
+                    @Html.DropDownListFor(model => model.pmh, (SelectList)ViewBag.vpmh, "Please Select", new { @class = "form-control chosen-select", with_add_item = true })
+                    <div class="input-group-append">
+                        <a id="pmh_remove_chosen" class="btn btn-danger btn-sm"> - </a>
+                    </div>
+                </div>
+                <div class="form-group form-row input-group input-group-sm">
+                    <div class="input-group-prepend">
+                        @Html.LabelFor(model => model.psh, htmlAttributes: new { @class = "control-label input-group-text" })
+                    </div>
+                    @Html.DropDownListFor(model => model.psh, (SelectList)ViewBag.vpsh, "Please Select", htmlAttributes: new { @class = "form-control chosen-select", with_add_item = true })
+                    <div class="input-group-append">
+                        <a id="psh_remove_chosen" class="btn btn-danger btn-sm"> - </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="form-row">
+            <div class="col-md-6 card">
+                @Html.Label("Present Medications", htmlAttributes: new { @class = "control-label card-header" })
+                <div class="form-row card-body">
+                    <div class="col">
+                        <div class="form-row">
+                            @Html.EditorFor(model => model.medi1, new { htmlAttributes = new { @class = "form-control col-md-6" } })
+                            @Html.EditorFor(model => model.medi2, new { htmlAttributes = new { @class = "form-control col-md-6" } })
+                        </div>
+                        <div class="form-row">
+                            @Html.EditorFor(model => model.medi3, new { htmlAttributes = new { @class = "form-control col-md-6" } })
+                            @Html.EditorFor(model => model.medi4, new { htmlAttributes = new { @class = "form-control col-md-6" } })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 card">
+                @Html.LabelFor(model => model.disc1, htmlAttributes: new { @class = "control-label card-header" })
+
+                @Html.TextAreaFor(model => model.disc1, htmlAttributes: new { @class = "form-control card-body" })
+            </div>
+        </div>
+        <br />
+        <div class="form-row">
+            <div class="col-md-6 card">
+                @Html.Label("Present Glasses", htmlAttributes: new { @class = "control-label card-header" })
+                <div class="card-body">
+                    <div class="form-group form-row input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.pdod, htmlAttributes: new { @class = "control-label input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.pdod, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+
+                    <div class="form-group form-row input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.pdos, htmlAttributes: new { @class = "control-label input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.pdos, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 card">
+                @Html.Label("Present Near Glasses", htmlAttributes: new { @class = "control-label card-header" })
+                <div class="card-body">
+                    <div class="form-group form-row input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.PresentNGOd, htmlAttributes: new { @class = "control-label input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.PresentNGOd, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+
+                    <div class="form-group form-row input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.PresentNGOs, htmlAttributes: new { @class = "control-label input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.PresentNGOs, new { htmlAttributes = new { @class = " form-control" } })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="form-row">
+            <div class="card col">
+                @Html.Label("Visual Acuity", htmlAttributes: new { @class = "control-label card-header" })
+                <div class="form-row card-body">
+                    <div class="col-md-6 card">
+                        @Html.Label("Without Glasses", htmlAttributes: new { @class = "control-label card-header" })
+                        <div class="card-body">
+                            <div class="form-group form-row input-group input-group-sm">
+                                <div class="input-group-prepend">
+                                    @Html.LabelFor(model => model.visualod, htmlAttributes: new { @class = "control-label input-group-text" })
+                                </div>
+                                @Html.DropDownListFor(model => model.visualod, (SelectList)ViewBag.vOD, new { @class = "form-control chosen-select" })
+                            </div>
+
+                            <div class="form-group form-row input-group input-group-sm">
+                                <div class="input-group-prepend">
+                                    @Html.LabelFor(model => model.visualos, htmlAttributes: new { @class = "control-label input-group-text" })
+                                </div>
+                                @Html.DropDownListFor(model => model.visualos, (SelectList)ViewBag.vOS, htmlAttributes: new { @class = "form-control chosen-select" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 card">
+                        @Html.Label("Without Glasses", htmlAttributes: new { @class = "control-label card-header" })
+                        <div class="card-body">
+                            <div class="form-group form-row input-group input-group-sm">
+                                <div class="input-group-prepend">
+                                    @Html.LabelFor(model => model.visualglassod, htmlAttributes: new { @class = "control-label input-group-text" })
+                                </div>
+                                @Html.DropDownListFor(model => model.visualglassod, (SelectList)ViewBag.vOD, new { @class = "form-control chosen-select" })
+                            </div>
+
+                            <div class="form-group form-row input-group input-group-sm">
+                                <div class="input-group-prepend">
+                                    @Html.LabelFor(model => model.visualglassos, htmlAttributes: new { @class = "control-label input-group-text" })
+                                </div>
+                                @Html.DropDownListFor(model => model.visualglassos, (SelectList)ViewBag.vOS, htmlAttributes: new { @class = "form-control chosen-select" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="form-row">
+            <div class="col-md-6 card">
+                @Html.Label("BCVA", htmlAttributes: new { @class = "control-label card-header" })
+                <div class="card-body">
+                    <div class="form-group form-row input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.BCVAOd3, htmlAttributes: new { @class = "control-label input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.BCVAOd3, new { htmlAttributes = new { @class = "form-control" } })
+                        <div class="input-group-append">
+                            @Html.DropDownListFor(model => model.BCVAOd1, (SelectList)ViewBag.vOD, htmlAttributes: new { @class = "form-control chosen-select" })
+                        </div>
+                    </div>
+
+                    <div class="form-group form-row input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.BCVAOs3, htmlAttributes: new { @class = "control-label input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.BCVAOs3, new { htmlAttributes = new { @class = "form-control" } })
+                        <div class="input-group-append">
+                            @Html.DropDownListFor(model => model.BCVAOs1, (SelectList)ViewBag.vOS, htmlAttributes: new { @class = "form-control chosen-select" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 align-self-center">
+                <div class="form-group form-row input-group input-group-sm align-self-center">
+                    <div class="input-group-prepend">
+                        @Html.LabelFor(model => model.apd_od, htmlAttributes: new { @class = "control-label input-group-text" })
+                    </div>
+                    @Html.EditorFor(model => model.apd_od, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="form-row">
+            <div class="col-md-6 card">
+                @Html.Label("Deviation", htmlAttributes: new { @class = "control-label card-header" })
+                <div class="card-body">
+                    <div class="form-group form-row input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.deviationod1, htmlAttributes: new { @class = "control-label input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.deviationod1, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+
+                    <div class="form-group form-row input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.deviationos1, htmlAttributes: new { @class = "control-label input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.deviationos1, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 card">
+                @Html.Label("Cyclo", htmlAttributes: new { @class = "control-label card-header" })
+                <div class="card-body">
+                    <div class="form-group form-row input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.cyclo1_od, htmlAttributes: new { @class = "control-label input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.cyclo1_od, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+
+                    <div class="form-group form-row input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.cyclo1_os, htmlAttributes: new { @class = "control-label input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.cyclo1_os, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="form-row">
+            <div class="col-md-6 card">
+                @Html.Label("ADD", htmlAttributes: new { @class = "control-label card-header" })
+                <div class="card-body">
+                    <div class="form-group form-row input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.drops1_od, htmlAttributes: new { @class = "control-label input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.drops1_od, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+
+                    <div class="form-group form-row input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.drops1_os, htmlAttributes: new { @class = "control-label input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.drops1_os, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 align-self-center">
+                <div class="form-group form-row input-group input-group-sm">
+                    <div class="input-group-prepend">
+                        @Html.LabelFor(model => model.npd, htmlAttributes: new { @class = "control-label input-group-text" })
+                    </div>
+                    @Html.EditorFor(model => model.npd, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+
+                <div class="form-group form-row input-group input-group-sm">
+                    <div class="input-group-prepend">
+                        @Html.LabelFor(model => model.apd_os, htmlAttributes: new { @class = "control-label input-group-text" })
+                    </div>
+                    @Html.DropDownListFor(model => model.apd_os, (SelectList)ViewBag.vapd, htmlAttributes: new { @class = "form-control chosen-select" })
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="form-row">
+            <div class="col-md-6 card">
+                @Html.Label("Contact Lens", htmlAttributes: new { @class = "control-label card-header" })
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="col-4 align-self-center">
+                            @Html.DropDownListFor(model => model.lenskind, (SelectList)ViewBag.vcontactLens, htmlAttributes: new { @class = "form-control chosen-select" })
+
+                        </div>
+                        <div class="col-8">
+                            <div class="form-group form-row input-group input-group-sm">
+                                <div class="input-group-prepend">
+                                    @Html.LabelFor(model => model.lenskindod, htmlAttributes: new { @class = "control-label input-group-text" })
+                                </div>
+                                @Html.EditorFor(model => model.lenskindod, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+
+                            <div class="form-group form-row input-group input-group-sm">
+                                <div class="input-group-prepend">
+                                    @Html.LabelFor(model => model.lenskindos, htmlAttributes: new { @class = "control-label input-group-text" })
+                                </div>
+                                @Html.EditorFor(model => model.lenskindos, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 align-self-center">
+                <div class="form-group form-row input-group input-group-sm">
+                    <div class="input-group-prepend">
+                        @Html.LabelFor(model => model.Slit, htmlAttributes: new { @class = "control-label input-group-text" })
+                    </div>
+                    @Html.EditorFor(model => model.Slit, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+
+                <div class="form-group form-row input-group input-group-sm">
+                    <div class="input-group-prepend">
+                        @Html.LabelFor(model => model.Conj, htmlAttributes: new { @class = "control-label input-group-text" })
+                    </div>
+                    @Html.EditorFor(model => model.Conj, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="form-row">
+            <div class="col-md-6 card">
+                @Html.Label("IOP", htmlAttributes: new { @class = "control-label card-header" })
+                <div class="card-body">
+                    <div class="form-group form-row input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.iop_od, htmlAttributes: new { @class = "control-label input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.iop_od, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+
+                    <div class="form-group form-row input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.iop_os, htmlAttributes: new { @class = "control-label input-group-text" })
+                        </div>
+                        @Html.EditorFor(model => model.iop_os, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 card">
+                @Html.Label("External Exam", htmlAttributes: new { @class = "control-label card-header" })
+                <div class="card-body">
+                    <div class="form-group form-row input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.pupils, htmlAttributes: new { @class = "control-label input-group-text" })
+                        </div>
+                        @Html.DropDownListFor(model => model.pupils, (SelectList)ViewBag.vpupils, "Please select", new { @class = "form-control chosen-select", with_add_item = true })
+                        <div class="input-group-append">
+                            <a id="pupils_remove_chosen" class="btn btn-danger btn-sm"> - </a>
+                        </div>
+                    </div>
+
+                    <div class="form-group form-row input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            @Html.LabelFor(model => model.pupilsOS, htmlAttributes: new { @class = "control-label input-group-text" })
+                        </div>
+                        @Html.DropDownListFor(model => model.pupilsOS, (SelectList)ViewBag.vpupils, "Please select", new { @class = "form-control chosen-select", with_add_item = true })
+                        <div class="input-group-append">
+                            <a id="pupilsOS_remove_chosen" class="btn btn-danger btn-sm"> - </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="form-row">
+            <div class="card col">
+                @Html.Label("Slit Lamp Exam", htmlAttributes: new { @class = "control-label card-header" })
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="col-md-6 card">
+                            @Html.Label("Cornea", htmlAttributes: new { @class = "control-label card-header" })
+                            <div class="card-body">
+                                <div class="form-group form-row input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        @Html.LabelFor(model => model.Cornea_od, htmlAttributes: new { @class = "control-label input-group-text" })
+                                    </div>
+                                    @Html.DropDownListFor(model => model.Cornea_od, (SelectList)ViewBag.vcornea, "Please select", new { @class = "form-control chosen-select", with_add_item = true })
+                                    <div class="input-group-append">
+                                        <a id="Cornea_od_remove_chosen" class="btn btn-danger btn-sm"> - </a>
+                                    </div>
+                                </div>
+
+                                <div class="form-group form-row input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        @Html.LabelFor(model => model.Cornea_os, htmlAttributes: new { @class = "control-label input-group-text" })
+                                    </div>
+                                    @Html.DropDownListFor(model => model.Cornea_os, (SelectList)ViewBag.vcornea, "Please select", new { @class = "form-control chosen-select", with_add_item = true })
+                                    <div class="input-group-append">
+                                        <a id="Cornea_os_remove_chosen" class="btn btn-danger btn-sm"> - </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 card">
+                            @Html.Label("AC", htmlAttributes: new { @class = "control-label card-header" })
+                            <div class="card-body">
+                                <div class="form-group form-row input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        @Html.LabelFor(model => model.ac_od, htmlAttributes: new { @class = "control-label input-group-text" })
+                                    </div>
+                                    @Html.DropDownListFor(model => model.ac_od, (SelectList)ViewBag.vac, "Please select", htmlAttributes: new { @class = "form-control chosen-select", with_add_item = true })
+                                    <div class="input-group-append">
+                                        <a id="ac_od_remove_chosen" class="btn btn-danger btn-sm"> - </a>
+                                    </div>
+                                </div>
+
+                                <div class="form-group form-row input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        @Html.LabelFor(model => model.ac_os, htmlAttributes: new { @class = "control-label input-group-text" })
+                                    </div>
+                                    @Html.DropDownListFor(model => model.ac_os, (SelectList)ViewBag.vac, "Please select", htmlAttributes: new { @class = "form-control chosen-select", with_add_item = true })
+                                    <div class="input-group-append">
+                                        <a id="ac_os_remove_chosen" class="btn btn-danger btn-sm"> - </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col-md-6 card">
+                            @Html.Label("Lens", htmlAttributes: new { @class = "control-label card-header" })
+                            <div class="card-body">
+                                <div class="form-group form-row input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        @Html.LabelFor(model => model.lens_od, htmlAttributes: new { @class = "control-label input-group-text" })
+                                    </div>
+                                    @Html.DropDownListFor(model => model.lens_od, (SelectList)ViewBag.vlens, "Please select", htmlAttributes: new { @class = "form-control chosen-select", with_add_item = true })
+                                    <div class="input-group-append">
+                                        <a id="lens_od_remove_chosen" class="btn btn-danger btn-sm"> - </a>
+                                    </div>
+                                </div>
+
+                                <div class="form-group form-row input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        @Html.LabelFor(model => model.lens_os, htmlAttributes: new { @class = "control-label input-group-text" })
+                                    </div>
+                                    @Html.DropDownListFor(model => model.lens_os, (SelectList)ViewBag.vlens, "Please select", htmlAttributes: new { @class = "form-control chosen-select", with_add_item = true })
+                                    <div class="input-group-append">
+                                        <a id="lens_os_remove_chosen" class="btn btn-danger btn-sm"> - </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 card">
+                            @Html.Label("Angle", htmlAttributes: new { @class = "control-label card-header" })
+                            <div class="card-body">
+                                <div class="form-group form-row input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        @Html.LabelFor(model => model.angleod, htmlAttributes: new { @class = "control-label input-group-text" })
+                                    </div>
+                                    @Html.DropDownListFor(model => model.angleod, (SelectList)ViewBag.vangle, "Please select", htmlAttributes: new { @class = "form-control chosen-select", with_add_item = true })
+                                    <div class="input-group-append">
+                                        <a id="angleod_remove_chosen" class="btn btn-danger btn-sm"> - </a>
+                                    </div>
+                                </div>
+
+                                <div class="form-group form-row input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        @Html.LabelFor(model => model.angleos, htmlAttributes: new { @class = "control-label input-group-text" })
+                                    </div>
+                                    @Html.DropDownListFor(model => model.angleos, (SelectList)ViewBag.vangle, "Please select", htmlAttributes: new { @class = "form-control chosen-select", with_add_item = true })
+                                    <div class="input-group-append">
+                                        <a id="angleos_remove_chosen" class="btn btn-danger btn-sm"> - </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="form-row">
+            <div class="card col">
+                @Html.Label("Funduscopy", htmlAttributes: new { @class = "control-label card-header" })
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="col-md-6 card">
+                            @Html.Label("Cup", htmlAttributes: new { @class = "control-label card-header" })
+                            <div class="card-body">
+                                <div class="form-group form-row input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        @Html.LabelFor(model => model.disc, htmlAttributes: new { @class = "control-label input-group-text" })
+                                    </div>
+                                    @Html.DropDownListFor(model => model.disc, (SelectList)ViewBag.vcup, "Please select", htmlAttributes: new { @class = "form-control chosen-select", with_add_item = true })
+                                    <div class="input-group-append">
+                                        <a id="disc_remove_chosen" class="btn btn-danger btn-sm"> - </a>
+                                    </div>
+                                </div>
+
+                                <div class="form-group form-row input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        @Html.LabelFor(model => model.disc_os, htmlAttributes: new { @class = "control-label input-group-text" })
+                                    </div>
+                                    @Html.DropDownListFor(model => model.disc_os, (SelectList)ViewBag.vcup, "Please select", htmlAttributes: new { @class = "form-control chosen-select", with_add_item = true })
+                                    <div class="input-group-append">
+                                        <a id="disc_os_remove_chosen" class="btn btn-danger btn-sm"> - </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 card">
+                            @Html.Label("Color", htmlAttributes: new { @class = "control-label card-header" })
+                            <div class="card-body">
+                                <div class="form-group form-row input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        @Html.LabelFor(model => model.color_od, htmlAttributes: new { @class = "control-label input-group-text" })
+                                    </div>
+                                    @Html.DropDownListFor(model => model.color_od, (SelectList)ViewBag.vcolor, "Please select", htmlAttributes: new { @class = "form-control chosen-select", with_add_item = true })
+                                    <div class="input-group-append">
+                                        <a id="color_od_remove_chosen" class="btn btn-danger btn-sm"> - </a>
+                                    </div>
+                                </div>
+
+                                <div class="form-group form-row input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        @Html.LabelFor(model => model.color_os, htmlAttributes: new { @class = "control-label input-group-text" })
+                                    </div>
+                                    @Html.DropDownListFor(model => model.color_os, (SelectList)ViewBag.vcolor, "Please select", htmlAttributes: new { @class = "form-control chosen-select", with_add_item = true })
+                                    <div class="input-group-append">
+                                        <a id="color_os_remove_chosen" class="btn btn-danger btn-sm"> - </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col-md-6 card">
+                            @Html.Label("Margin", htmlAttributes: new { @class = "control-label card-header" })
+                            <div class="card-body">
+                                <div class="form-group form-row input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        @Html.LabelFor(model => model.margin_od, htmlAttributes: new { @class = "control-label input-group-text" })
+                                    </div>
+                                    @Html.DropDownListFor(model => model.margin_od, (SelectList)ViewBag.vmargin, "Please select", htmlAttributes: new { @class = "form-control chosen-select", with_add_item = true })
+                                    <div class="input-group-append">
+                                        <a id="margin_od_remove_chosen" class="btn btn-danger btn-sm"> - </a>
+                                    </div>
+                                </div>
+
+                                <div class="form-group form-row input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        @Html.LabelFor(model => model.margin_os, htmlAttributes: new { @class = "control-label input-group-text" })
+                                    </div>
+                                    @Html.DropDownListFor(model => model.margin_os, (SelectList)ViewBag.vmargin, "Please select", htmlAttributes: new { @class = "form-control chosen-select", with_add_item = true })
+                                    <div class="input-group-append">
+                                        <a id="margin_os_remove_chosen" class="btn btn-danger btn-sm"> - </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 card">
+                            @Html.Label("Vessels", htmlAttributes: new { @class = "control-label card-header" })
+                            <div class="card-body">
+                                <div class="form-group form-row input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        @Html.LabelFor(model => model.vesselsos, htmlAttributes: new { @class = "control-label input-group-text" })
+                                    </div>
+                                    @Html.DropDownListFor(model => model.vesselsos, (SelectList)ViewBag.vvessels, "Please select", htmlAttributes: new { @class = "form-control chosen-select", with_add_item = true })
+                                    <div class="input-group-append">
+                                        <a id="vesselsos_remove_chosen" class="btn btn-danger btn-sm"> - </a>
+                                    </div>
+                                </div>
+
+                                <div class="form-group form-row input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        @Html.LabelFor(model => model.vesselsod, htmlAttributes: new { @class = "control-label input-group-text" })
+                                    </div>
+                                    @Html.DropDownListFor(model => model.vesselsod, (SelectList)ViewBag.vvessels, "Please select", htmlAttributes: new { @class = "form-control chosen-select", with_add_item = true })
+                                    <div class="input-group-append">
+                                        <a id="vesselsod_remove_chosen" class="btn btn-danger btn-sm"> - </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col-md-6 card">
+                            @Html.Label("Periphery", htmlAttributes: new { @class = "control-label card-header" })
+                            <div class="card-body">
+                                <div class="form-group form-row input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        @Html.LabelFor(model => model.peripheryod, htmlAttributes: new { @class = "control-label input-group-text" })
+                                    </div>
+                                    @Html.DropDownListFor(model => model.peripheryod, (SelectList)ViewBag.vperiphery, "Please select", htmlAttributes: new { @class = "form-control chosen-select", with_add_item = true })
+                                    <div class="input-group-append">
+                                        <a id="peripheryod_remove_chosen" class="btn btn-danger btn-sm"> - </a>
+                                    </div>
+                                </div>
+
+                                <div class="form-group form-row input-group input-group-sm">
+                                    <div class="input-group-prepend">
+                                        @Html.LabelFor(model => model.peripheryos, htmlAttributes: new { @class = "control-label input-group-text" })
+                                    </div>
+                                    @Html.DropDownListFor(model => model.peripheryos, (SelectList)ViewBag.vperiphery, "Please select", htmlAttributes: new { @class = "form-control chosen-select", with_add_item = true })
+                                    <div class="input-group-append">
+                                        <a id="peripheryos_remove_chosen" class="btn btn-danger btn-sm"> - </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="form-row card">
+            @Html.Label("IOP", htmlAttributes: new { @class = "control-label card-header" })
+            <div class="card-body">
+                <div class="form-group input-group input-group-sm">
+                    <div class="input-group-prepend">
+                        @Html.LabelFor(model => model.macula1, htmlAttributes: new { @class = "control-label input-group-text" })
+                    </div>
+                    @Html.DropDownListFor(model => model.macula1, (SelectList)ViewBag.vmacula, "Please select", htmlAttributes: new { @class = "form-control chosen-select", with_add_item = true })
+                    <div class="input-group-append">
+                        <a id="macula1_remove_chosen" class="btn btn-danger btn-sm"> - </a>
+                    </div>
+                </div>
+
+                <div class="form-group form-row input-group input-group-sm">
+                    <div class="input-group-prepend">
+                        @Html.LabelFor(model => model.macula2, htmlAttributes: new { @class = "control-label input-group-text" })
+                    </div>
+                    @Html.DropDownListFor(model => model.macula2, (SelectList)ViewBag.vmacula, "Please select", htmlAttributes: new { @class = "form-control chosen-select", with_add_item = true })
+                    <div class="input-group-append">
+                        <a id="macula2_remove_chosen" class="btn btn-danger btn-sm"> - </a>
+                    </div>
+                </div>
+
+                <div class="form-group form-row input-group input-group-sm">
+                    <div class="input-group-prepend">
+                        @Html.LabelFor(model => model.macula3, htmlAttributes: new { @class = "control-label input-group-text" })
+                    </div>
+                    @Html.DropDownListFor(model => model.macula3, (SelectList)ViewBag.vmacula, "Please select", htmlAttributes: new { @class = "form-control chosen-select", with_add_item = true })
+                    <div class="input-group-append">
+                        <a id="macula3_remove_chosen" class="btn btn-danger btn-sm"> - </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="form-row">
+            <div class="col-md-6">
+                <div class="form-group form-row input-group input-group-sm">
+                    <div class="input-group-prepend">
+                        @Html.LabelFor(model => model.diag, htmlAttributes: new { @class = "control-label input-group-text" })
+                    </div>
+                    @Html.ListBox("diagMulti", (MultiSelectList)ViewBag.vassess, htmlAttributes: new { @class = "form-control chosen-select", id = "diagMulti", with_add_item = true })
+                    @Html.HiddenFor(model => model.diag)
+                    <div class="input-group-append">
+                        <a id="diagMulti_remove_chosen" class="btn btn-danger btn-sm"> - </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group form-row input-group input-group-sm">
+                    <div class="input-group-prepend">
+                        @Html.LabelFor(model => model.plan, htmlAttributes: new { @class = "control-label input-group-text" })
+                    </div>
+                    @Html.ListBox("planMulti", (MultiSelectList)ViewBag.vplan, htmlAttributes: new { @class = "form-control chosen-select", id = "planMulti", with_add_item = true })
+                    @Html.HiddenFor(model => model.plan)
+                    <div class="input-group-append">
+                        <a id="planMulti_remove_chosen" class="btn btn-danger btn-sm"> - </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.nearaddOd, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.nearaddOd, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.nearaddOd, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.nearaddOs, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.nearaddOs, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.nearaddOs, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Near2, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Near2, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Near2, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Ref2, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Ref2, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Ref2, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.disc2, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.disc2, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.disc2, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.disc_od, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.disc_od, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.disc_od, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.date2, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.date2, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.date2, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.BCVAOd2, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.BCVAOd2, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.BCVAOd2, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.BCVAOs2, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.BCVAOs2, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.BCVAOs2, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Addod, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Addod, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Addod, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Addos, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Addos, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Addos, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.nearaddod2, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.nearaddod2, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.nearaddod2, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.nearaddod3, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.nearaddod3, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.nearaddod3, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.nearaddos2, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.nearaddos2, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.nearaddos2, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.nearaddos3, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.nearaddos3, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.nearaddos3, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.diag5, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.diag5, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.diag5, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.diag6, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.diag6, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.diag6, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.plan5, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.plan5, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.plan5, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.plan6, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.plan6, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.plan6, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.BCVAOdcolor, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.BCVAOdcolor, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.BCVAOdcolor, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.BCVAOscolor, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.BCVAOscolor, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.BCVAOscolor, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Tonopenos, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Tonopenos, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Tonopenos, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Tonopenod, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Tonopenod, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Tonopenod, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.discopt, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.discopt, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.discopt, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.pakod, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.pakod, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.pakod, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.pakos, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.pakos, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.pakos, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-primary btn-lg" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+
+@section Scripts {
+    <script src="@Url.Content("~/Scripts/chosen.jquery.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/prism.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/init.js")" type="text/javascript"></script>
+    <link href="@Url.Content("~/Content/prism.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/chosen.css")" rel="stylesheet" type="text/css" />
+    <script>
+        function addDesease(group, text, id) {
+            if ($("#" + id + " option[value='" + text + "']").length == 0) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("addDesease", "SickDocuments")',
+                    data: {
+                        group: group,
+                        text: text
+                    },
+                    // here we are get value of selected country and passing same value as input to json method GetStates.
+
+                    success: function () {
+                        if (group == "MACULA") {
+                            $("#macula1").append($("<option     />").val(text).text(text));
+                            $("#macula2").append($("<option     />").val(text).text(text));
+                            $("#macula3").append($("<option     />").val(text).text(text));
+                            $("#" + id + " option[value='" + text + "']").prop('selected', true);
+                            $("#macula1").trigger("chosen:updated");
+                            $("#macula2").trigger("chosen:updated");
+                            $("#macula3").trigger("chosen:updated");
+                        }
+                        else if (group == "PERIPHERY")
+                        {
+                            $("#peripheryod").append($("<option     />").val(text).text(text));
+                            $("#peripheryos").append($("<option     />").val(text).text(text));
+                            $("#" + id + " option[value='" + text + "']").prop('selected', true);
+                            $("#peripheryod").trigger("chosen:updated");
+                            $("#peripheryos").trigger("chosen:updated");
+                        }
+                        else if (group == "VESSELS") {
+                            $("#vesselsos").append($("<option     />").val(text).text(text));
+                            $("#vesselsod").append($("<option     />").val(text).text(text));
+                            $("#" + id + " option[value='" + text + "']").prop('selected', true);
+                            $("#vesselsos").trigger("chosen:updated");
+                            $("#vesselsod").trigger("chosen:updated");
+                        }
+                        else if (group == "MARGIN") {
+                            $("#margin_od").append($("<option     />").val(text).text(text));
+                            $("#margin_os").append($("<option     />").val(text).text(text));
+                            $("#" + id + " option[value='" + text + "']").prop('selected', true);
+                            $("#margin_od").trigger("chosen:updated");
+                            $("#margin_os").trigger("chosen:updated");
+                        }
+                        else if (group == "COLOR") {
+                            $("#color_od").append($("<option     />").val(text).text(text));
+                            $("#color_os").append($("<option     />").val(text).text(text));
+                            $("#" + id + " option[value='" + text + "']").prop('selected', true);
+                            $("#color_od").trigger("chosen:updated");
+                            $("#color_os").trigger("chosen:updated");
+                        }
+                        else if (group == "DISC/CUP") {
+                            $("#disc").append($("<option     />").val(text).text(text));
+                            $("#disc_os").append($("<option     />").val(text).text(text));
+                            $("#" + id + " option[value='" + text + "']").prop('selected', true);
+                            $("#disc").trigger("chosen:updated");
+                            $("#disc_os").trigger("chosen:updated");
+                        }
+                        else if (group == "ANGLE") {
+                            $("#angleod").append($("<option     />").val(text).text(text));
+                            $("#angleos").append($("<option     />").val(text).text(text));
+                            $("#" + id + " option[value='" + text + "']").prop('selected', true);
+                            $("#angleod").trigger("chosen:updated");
+                            $("#angleos").trigger("chosen:updated");
+                        }
+                        else if (group == "LENS") {
+                            $("#lens_od").append($("<option     />").val(text).text(text));
+                            $("#lens_os").append($("<option     />").val(text).text(text));
+                            $("#" + id + " option[value='" + text + "']").prop('selected', true);
+                            $("#lens_od").trigger("chosen:updated");
+                            $("#lens_os").trigger("chosen:updated");
+                        }
+                        else if (group == "AC") {
+                            $("#ac_od").append($("<option     />").val(text).text(text));
+                            $("#ac_os").append($("<option     />").val(text).text(text));
+                            $("#" + id + " option[value='" + text + "']").prop('selected', true);
+                            $("#ac_od").trigger("chosen:updated");
+                            $("#ac_os").trigger("chosen:updated");
+                        }
+                        else if (group == "CORNEA") {
+                            $("#Cornea_od").append($("<option     />").val(text).text(text));
+                            $("#Cornea_os").append($("<option     />").val(text).text(text));
+                            $("#" + id + " option[value='" + text + "']").prop('selected', true);
+                            $("#Cornea_od").trigger("chosen:updated");
+                            $("#Cornea_os").trigger("chosen:updated");
+                        }
+                        else if (group == "PUPILS") {
+                            $("#pupils").append($("<option     />").val(text).text(text));
+                            $("#pupilsOS").append($("<option     />").val(text).text(text));
+                            $("#" + id + " option[value='" + text + "']").prop('selected', true);
+                            $("#pupils").trigger("chosen:updated");
+                            $("#pupilsOS").trigger("chosen:updated");
+                        }
+                        else{
+                            $("#" + id).append($("<option     />").val(text).text(text).prop('selected', true));
+                            $("#" + id).trigger("chosen:updated");
+                        }
+
+                    },
+                    error: function (ex) {
+                        alert('Failed to retrieve states.' + ex);
+                    }
+                });
+            }
+            else {
+                $("#" + id + " option[value='" + text + "']").prop('selected', true);
+                $("#" + id).trigger("chosen:updated");
+            }
+
+        }
+        function removeDesease(group, text, id) {
+            if ($("#" + id + " option[value='" + text + "']").length > 0) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("removeDesease", "SickDocuments")',
+                    data: {
+                        group: group,
+                        text: text
+                    },
+                    // here we are get value of selected country and passing same value as input to json method GetStates.
+
+                    success: function () {
+                        if (group == "MACULA") {
+                            $("#macula1 option[value='" + text + "']").remove();
+                            $("#macula2 option[value='" + text + "']").remove();
+                            $("#macula3 option[value='" + text + "']").remove();
+                            $("#macula1").trigger("chosen:updated");
+                            $("#macula2").trigger("chosen:updated");
+                            $("#macula3").trigger("chosen:updated");
+                        }
+                        else if (group == "PERIPHERY") {
+                            $("#peripheryod option[value='" + text + "']").remove();
+                            $("#peripheryos option[value='" + text + "']").remove();
+                            $("#peripheryod").trigger("chosen:updated");
+                            $("#peripheryos").trigger("chosen:updated");
+                        }
+                        else if (group == "VESSELS") {
+                            $("#vesselsos option[value='" + text + "']").remove();
+                            $("#vesselsod option[value='" + text + "']").remove();
+                            $("#vesselsos").trigger("chosen:updated");
+                            $("#vesselsod").trigger("chosen:updated");
+                        }
+                        else if (group == "MARGIN") {
+                            $("#margin_od option[value='" + text + "']").remove();
+                            $("#margin_os option[value='" + text + "']").remove();
+                            $("#margin_od").trigger("chosen:updated");
+                            $("#margin_os").trigger("chosen:updated");
+                        }
+                        else if (group == "COLOR") {
+                            $("#color_od option[value='" + text + "']").remove();
+                            $("#color_os option[value='" + text + "']").remove();
+                            $("#color_od").trigger("chosen:updated");
+                            $("#color_os").trigger("chosen:updated");
+                        }
+                        else if (group == "DISC/CUP") {
+                            $("#disc option[value='" + text + "']").remove();
+                            $("#disc_os option[value='" + text + "']").remove();
+                            $("#disc").trigger("chosen:updated");
+                            $("#disc_os").trigger("chosen:updated");
+                        }
+                        else if (group == "ANGLE") {
+                            $("#angleod option[value='" + text + "']").remove();
+                            $("#angleos option[value='" + text + "']").remove();
+                            $("#angleod").trigger("chosen:updated");
+                            $("#angleos").trigger("chosen:updated");
+                        }
+                        else if (group == "LENS") {
+                            $("#lens_od option[value='" + text + "']").remove();
+                            $("#lens_os option[value='" + text + "']").remove();
+                            $("#lens_od").trigger("chosen:updated");
+                            $("#lens_os").trigger("chosen:updated");
+                        }
+                        else if (group == "AC") {
+                            $("#ac_od option[value='" + text + "']").remove();
+                            $("#ac_os option[value='" + text + "']").remove();
+                            $("#ac_od").trigger("chosen:updated");
+                            $("#ac_os").trigger("chosen:updated");
+                        }
+                        else if (group == "CORNEA") {
+                            $("#Cornea_od option[value='" + text + "']").remove();
+                            $("#Cornea_os option[value='" + text + "']").remove();
+                            $("#Cornea_od").trigger("chosen:updated");
+                            $("#Cornea_os").trigger("chosen:updated");
+                        }
+                        else if (group == "PUPILS") {
+                            $("#pupils option[value='" + text + "']").remove();
+                            $("#pupilsOS option[value='" + text + "']").remove();
+                            $("#pupils").trigger("chosen:updated");
+                            $("#pupilsOS").trigger("chosen:updated");
+                        }
+                        else {
+                            $("#" + id + " option[value='" + text + "']").remove();
+                            $("#" + id).trigger("chosen:updated");
+                        }
+                    },
+                    error: function (ex) {
+                        alert('Failed to retrieve states.' + ex);
+                    }
+                });
+            }
+        }
+
+        function addComplate(text) {
+            if ($("#diagMulti option[value='" + text + "']").length == 0) {
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("addComplate", "SickDocuments")',
+                    data: {
+                        text: text
+                    },
+                    // here we are get value of selected country and passing same value as input to json method GetStates.
+
+                    success: function () {
+                        $("#diagMulti").append($("<option     />").val(text).text(text).prop('selected', true));
+                        $("#diagMulti").trigger("chosen:updated");
+                    },
+                    error: function (ex) {
+                        alert('Failed to retrieve states.' + ex);
+                    }
+                });
+            }
+            else {
+                $("#diagMulti option[value='" + text + "']").prop('selected', true);
+                $("#diagMulti").trigger("chosen:updated");
+            }
+        }
+        function removeComplate(text) {
+            if ($("#diagMulti option[value='" + text + "']").length > 0) {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("removeComplate", "SickDocuments")',
+                    data: {
+                        text: text
+                    },
+                    // here we are get value of selected country and passing same value as input to json method GetStates.
+
+                    success: function () {
+                        $("#diagMulti option[value='" + text + "']").remove();
+                        $("#diagMulti").trigger("chosen:updated");
+                    },
+                    error: function (ex) {
+                        alert('Failed to retrieve states.' + ex);
+                    }
+                });
+            }
+        }
+
+        $(document).ready(function () {
+            $('#ccMulti').chosen();
+            $('#ccMulti').val('@Model.cc');
+            $('#ccMulti').trigger("chosen:updated");
+
+            $('#diagMulti').chosen();
+            $('#diagMulti').val('@Model.diag');
+            $('#diagMulti').trigger("chosen:updated");
+
+            $('#planMulti').chosen();
+            $('#planMulti').val('@Model.plan');
+            $('#planMulti').trigger("chosen:updated");
+
+
+
+
+            $("#Date").chosen().change(function () {
+                var date = $("#Date").val();
+                var code = $("#pcode").val();
+                location.href = '@Url.Action("Documents", "SickDocuments")?Id=' + code + '&date=' + date;
+            });
+
+            $("#ccMulti").chosen().change(function () {
+                var ccText = '';
+                for (var opt = 0; opt < $("#ccMulti option:selected").length; opt++)
+                    ccText += $("#ccMulti option:selected")[opt].text + ' ';
+                $("#cc").val(ccText.substr(0, ccText.length - 1));
+            });
+
+            $("#diagMulti").chosen().change(function () {
+                var ccText = '';
+                for (var opt = 0; opt < $("#diagMulti option:selected").length; opt++)
+                    ccText += $("#diagMulti option:selected")[opt].text + ' ';
+                $("#diag").val(ccText.substr(0, ccText.length - 1));
+            });
+
+            $("#planMulti").chosen().change(function () {
+                var ccText = '';
+                for (var opt = 0; opt < $("#planMulti option:selected").length; opt++)
+                    ccText += $("#planMulti option:selected")[opt].text + ' ';
+                $("#plan").val(ccText.substr(0, ccText.length - 1));
+            });
+
+
+
+
+            $("#diagMulti_add_chosen").click(function () {
+                addComplate($("#diag").val() + " " + $('#diagMulti_chosen .search-field input').val());
+            });
+            $("#diagMulti_remove_chosen").click(function () {
+                for (var opt = 0; opt < $("#diagMulti option:selected").length; opt++)
+                    removeComplate($("#diagMulti option:selected")[opt].text)
+            });
+
+            $("#planMulti_add_chosen").click(function () {
+                addDesease("PLAN", $("#plan").val() + " " + $('#planMulti_chosen .search-field input').val(), "planMulti");
+            });
+            $("#planMulti_remove_chosen").click(function () {
+                for (var opt = 0; opt < $("#planMulti option:selected").length; opt++)
+                    removeDesease("PLAN", $("#planMulti option:selected")[opt].text, "planMulti");
+            });
+
+            $("#ccMulti_add_chosen").click(function () {
+                addDesease("CC", $("#cc").val() + " " + $('#ccMulti_chosen .search-field input').val(), "ccMulti");
+            });
+            $("#ccMulti_remove_chosen").click(function () {
+                for (var opt = 0; opt < $("#ccMulti option:selected").length; opt++)
+                    removeDesease("CC", $("#ccMulti option:selected")[opt].text, "ccMulti");
+            });
+
+            $("#fmh_add_chosen").click(function () {
+                addDesease("FMH", $('#fmh_chosen .chosen-search input').val(), "fmh");
+            });
+            $("#fmh_remove_chosen").click(function () {
+                removeDesease("FMH", $("#fmh option:selected").text(), "fmh");
+            });
+
+            $("#pmh_add_chosen").click(function () {
+                addDesease("PMH", $('#pmh_chosen .chosen-search input').val(), "pmh");
+            });
+            $("#pmh_remove_chosen").click(function () {
+                removeDesease("PMH", $("#pmh option:selected").text(), "pmh");
+            });
+
+            $("#psh_add_chosen").click(function () {
+                addDesease("POH", $('#psh_chosen .chosen-search input').val(), "psh");
+            });
+            $("#psh_remove_chosen").click(function () {
+                removeDesease("POH", $("#psh option:selected").text(), "psh");
+            });
+
+            $("#pupils_add_chosen").click(function () {
+                addDesease("PUPILS", $('#pupils_chosen .chosen-search input').val(), "pupils");
+            });
+            $("#pupils_remove_chosen").click(function () {
+                removeDesease("PUPILS", $('#pupils option:selected').val(), "pupils");
+            });
+
+            $("#pupilsOS_add_chosen").click(function () {
+                addDesease("PUPILS", $('#pupilsOS_chosen .chosen-search input').val(), "pupilsOS");
+            });
+            $("#pupilsOS_remove_chosen").click(function () {
+                removeDesease("PUPILS", $('#pupilsOS option:selected').val(), "pupilsOS");
+            });
+
+            $("#Cornea_od_add_chosen").click(function () {
+                addDesease("CORNEA", $('#Cornea_od_chosen .chosen-search input').val(), "Cornea_od");
+            });
+            $("#Cornea_od_remove_chosen").click(function () {
+                removeDesease("CORNEA", $('#Cornea_od option:selected').val(), "Cornea_od");
+            });
+
+            $("#Cornea_os_add_chosen").click(function () {
+                addDesease("CORNEA", $('#Cornea_os_chosen .chosen-search input').val(), "Cornea_os");
+            });
+            $("#Cornea_os_remove_chosen").click(function () {
+                removeDesease("CORNEA", $('#Cornea_os option:selected').val(), "Cornea_os");
+            });
+
+            $("#ac_od_add_chosen").click(function () {
+                addDesease("AC", $('#ac_od_chosen .chosen-search input').val(), "ac_od");
+            });
+            $("#ac_od_remove_chosen").click(function () {
+                removeDesease("AC", $('#ac_od option:selected').val(), "ac_od");
+            });
+
+            $("#ac_os_add_chosen").click(function () {
+                addDesease("AC", $('#ac_os_chosen .chosen-search input').val(), "ac_os");
+            });
+            $("#ac_os_remove_chosen").click(function () {
+                removeDesease("AC", $('#ac_os option:selected').val(), "ac_os");
+            });
+
+            $("#lens_od_add_chosen").click(function () {
+                addDesease("LENS", $('#lens_od_chosen .chosen-search input').val(), "lens_od");
+            });
+            $("#lens_od_remove_chosen").click(function () {
+                removeDesease("LENS", $('#lens_od option:selected').val(), "lens_od");
+            });
+
+            $("#lens_os_add_chosen").click(function () {
+                addDesease("LENS", $('#lens_os_chosen .chosen-search input').val(), "lens_os");
+            });
+            $("#lens_os_remove_chosen").click(function () {
+                removeDesease("LENS", $('#lens_os option:selected').val(), "lens_os");
+            });
+
+            $("#angleod_add_chosen").click(function () {
+                addDesease("ANGLE", $('#angleod_chosen .chosen-search input').val(), "angleod");
+            });
+            $("#angleod_remove_chosen").click(function () {
+                removeDesease("ANGLE", $('#angleod option:selected').val(), "angleod");
+            });
+
+            $("#angleos_add_chosen").click(function () {
+                addDesease("ANGLE", $('#angleos_chosen .chosen-search input').val(), "angleos");
+            });
+            $("#angleos_remove_chosen").click(function () {
+                removeDesease("ANGLE", $('#angleos option:selected').val(), "angleos");
+            });
+
+            $("#disc_add_chosen").click(function () {
+                addDesease("DISC/CUP", $('#disc_chosen .chosen-search input').val(), "disc");
+            });
+            $("#disc_remove_chosen").click(function () {
+                removeDesease("DISC/CUP", $('#disc option:selected').val(), "disc");
+            });
+
+            $("#disc_os_add_chosen").click(function () {
+                addDesease("DISC/CUP", $('#disc_os_chosen .chosen-search input').val(), "disc_os");
+            });
+            $("#disc_os_remove_chosen").click(function () {
+                removeDesease("DISC/CUP", $('#disc_os option:selected').val(), "disc_os");
+            });
+
+            $("#color_od_add_chosen").click(function () {
+                addDesease("COLOR", $('#color_od_chosen .chosen-search input').val(), "color_od");
+            });
+            $("#color_od_remove_chosen").click(function () {
+                removeDesease("COLOR", $('#color_od option:selected').val(), "color_od");
+            });
+
+            $("#color_os_add_chosen").click(function () {
+                addDesease("COLOR", $('#color_os_chosen .chosen-search input').val(), "color_os");
+            });
+            $("#color_os_remove_chosen").click(function () {
+                removeDesease("COLOR", $('#color_os option:selected').val(), "color_os");
+            });
+
+            $("#margin_od_add_chosen").click(function () {
+                addDesease("MARGIN", $('#margin_od_chosen .chosen-search input').val(), "margin_od");
+            });
+            $("#margin_od_remove_chosen").click(function () {
+                removeDesease("MARGIN", $('#margin_od option:selected').val(), "margin_od");
+            });
+
+            $("#margin_os_add_chosen").click(function () {
+                addDesease("MARGIN", $('#margin_os_chosen .chosen-search input').val(), "margin_os");
+            });
+            $("#margin_os_remove_chosen").click(function () {
+                removeDesease("MARGIN", $('#margin_os option:selected').val(), "margin_os");
+            });
+
+            $("#vesselsos_add_chosen").click(function () {
+                addDesease("VESSELS", $('#vesselsos_chosen .chosen-search input').val(), "vesselsos");
+            });
+            $("#vesselsos_remove_chosen").click(function () {
+                removeDesease("VESSELS", $('#vesselsos option:selected').val(), "vesselsos");
+            });
+
+            $("#vesselsod_add_chosen").click(function () {
+                addDesease("VESSELS", $('#vesselsod_chosen .chosen-search input').val(), "vesselsod");
+            });
+            $("#vesselsod_remove_chosen").click(function () {
+                removeDesease("VESSELS", $('#vesselsod option:selected').val(), "vesselsod");
+            });
+
+            $("#peripheryod_add_chosen").click(function () {
+                addDesease("PERIPHERY", $('#peripheryod_chosen .chosen-search input').val(), "peripheryod");
+            });
+            $("#peripheryod_remove_chosen").click(function () {
+                removeDesease("PERIPHERY", $('#peripheryod option:selected').val(), "peripheryod");
+            });
+
+            $("#peripheryos_add_chosen").click(function () {
+                addDesease("PERIPHERY", $('#peripheryos_chosen .chosen-search input').val(), "peripheryos");
+            });
+            $("#peripheryos_remove_chosen").click(function () {
+                removeDesease("PERIPHERY", $('#peripheryos option:selected').val(), "peripheryos");
+            });
+
+            $("#macula1_add_chosen").click(function () {
+                addDesease("MACULA", $('#macula1_chosen .chosen-search input').val(), "macula1");
+            });
+            $("#macula1_remove_chosen").click(function () {
+                removeDesease("MACULA", $('#macula1 option:selected').val(), "macula1");
+            });
+
+            $("#macula2_add_chosen").click(function () {
+                addDesease("MACULA", $('#macula2_chosen .chosen-search input').val(), "macula2");
+            });
+            $("#macula2_remove_chosen").click(function () {
+                removeDesease("MACULA", $('#macula2 option:selected').val(), "macula2");
+            });
+
+            $("#macula3_add_chosen").click(function () {
+                addDesease("MACULA", $('#macula3_chosen .chosen-search input').val(), "macula3");
+            });
+            $("#macula3_remove_chosen").click(function () {
+                removeDesease("MACULA", $('#macula3 option:selected').val(), "macula3");
+            });
+        });
+    </script>
+}

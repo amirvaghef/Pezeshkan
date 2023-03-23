@@ -1,0 +1,24 @@
+﻿@model IEnumerable<Pezeshkan.Models.SickInfo>
+
+@{
+    ViewBag.Title = "Sick Info List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div>
+    <p>
+        <input id="personalInfoSearch" style="width: 630px; position: relative" />
+        @Html.ValidationMessage("CustomError")
+    </p>
+    <div id="dvSickList">
+        @{Html.RenderPartial("_PersonalInfoList", Model);}
+    </div>
+
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $("#personalInfoSearch").keyup(function () {
+            var searchText = $("#personalInfoSearch").val();
+            $("#dvSickList").load('@(Url.Action("PersonalInfo", "SickDocuments", null, Request.Url.Scheme))?searchText=' + searchText);
+        });
+    });
+    </script>
+</div>
